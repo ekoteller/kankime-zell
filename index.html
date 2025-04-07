@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doğum gününe kalan süre kankiim</title>
+    <style>
+        :root {
+            --space: #0f0f0f;
+            --blood: #ff4d4d;
+            --moon: #e6e6e6;
+            --smoke: #4a4a4a;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--space);
+            color: var(--moon);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .bro-container {
+            max-width: 800px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+            border: 2px solid var(--blood);
+            border-radius: 20px;
+            margin-top: 2rem;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            box-shadow: 0 0 30px rgba(255,77,77,0.2);
+        }
+
+        .bro-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .bro-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--blood);
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+
+        .time-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--smoke);
+            transition: all 0.3s ease;
+        }
+
+        .time-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--blood);
+        }
+
+        .number {
+            font-size: 2.2rem;
+            color: var(--blood);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .label {
+            color: var(--smoke);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .bro-message {
+            text-align: center;
+            margin: 2rem 0;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .pulse {
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @media (max-width: 768px) {
+            .bro-container {
+                padding: 1.5rem;
+                margin-top: 1rem;
+                border-radius: 15px;
+            }
+
+            .bro-title {
+                font-size: 1.8rem;
+            }
+
+            .countdown-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .time-card {
+                padding: 1rem;
+            }
+
+            .number {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bro-title {
+                font-size: 1.5rem;
+            }
+
+            .bro-message {
+                font-size: 1rem;
+            }
+        }
+
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: 2px solid var(--blood);
+            color: var(--blood);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--blood);
+            color: var(--space);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+    <div class="bro-container">
+        <h1 class="bro-title">
+            <span class="pulse">🌓</span>Doğum gününe kalan süre kankiim<span class="pulse">🌓</span>
+        </h1>
+
+        <div class="countdown-grid">
+            <div class="time-card">
+                <div class="number" id="days">0</div>
+                <div class="label">Gün</div>
+            </div>
+            <div class="time-card">
+                <div class="number" id="hours">0</div>
+                <div class="label">Saat</div>
+            </div>
+            <div class="time-card">
+                <div class="number" id="minutes">0</div>
+                <div class="label">Dakika</div>
+            </div>
+            <div class="time-card">
+                <div class="number" id="seconds">0</div>
+                <div class="label">Saniye</div>
+            </div>
+        </div>
+
+        <p class="bro-message">
+            "Yıldızlar sönse de yolumu aydınlatırsın,<br>
+            İyi ki varsın kardeşimsin, yanımda olduğun her an<br>
+            Zamanın en değerli armağanı..."
+        </p>
+    </div>
+
+    <script>
+        // Hassas Geri Sayım
+        const targetDate = new Date('2026-01-12T00:00:00');
+        
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Tema Değiştirme
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            document.body.style.backgroundColor = document.body.classList.contains('light-mode') 
+                ? '#f5f5f5' 
+                : '#0f0f0f';
+        }
+
+        // İlk Yükleme
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Mobil Dokunmatik Optimizasyon
+        document.querySelectorAll('.time-card').forEach(card => {
+            card.addEventListener('touchstart', () => {
+                card.style.transform = 'translateY(-5px)';
+            });
+            
+            card.addEventListener('touchend', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
